@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Will You Be My Valentine?</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* * =========================================
+         * CSS STYLES
+         * =========================================
+         */
+        
+        :root {
+            --primary-pink: #ffb7c5;
+            --deep-pink: #ff6b81;
+            --text-color: #5a3e3e;
+            --bg-gradient: linear-gradient(135deg, #fff0f5 0%, #ffe4e1 100%);
+            --glass-bg: rgba(255, 255, 255, 0.90);
+            --shadow: 0 10px 30px rgba(255, 183, 197, 0.5);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: var(--bg-gradient);
+            color: var(--text-color);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Floating Background Hearts */
+        .bg-heart {
+            position: absolute;
+            color: rgba(255, 183, 197, 0.6);
+            font-size: 20px;
+            animation: floatUp linear infinite;
+            z-index: -1;
+            user-select: none;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(100vh) scale(0.5); opacity: 0; }
+            50% { opacity: 0.8; }
+            100% { transform: translateY(-10vh) scale(1.2); opacity: 0; }
+        }
+
+        /* Container */
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        /* Typography */
+        h1 {
+            font-family: 'Great Vibes', cursive;
+            font-size: 3.5rem;
+            color: var(--deep-pink);
+            text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.8);
+            margin-bottom: 10px;
+            line-height: 1.2;
+        }
+
+        h2 {
+            font-family: 'Great Vibes', cursive;
+            font-size: 2.8rem;
+            color: var(--deep-pink);
+            margin-bottom: 20px;
+        }
+
+        p { font-size: 1.2rem; line-height: 1.8; margin-bottom: 15px; }
+
+        /* The Love Letter Card */
+        .card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: var(--shadow);
+            border: 2px solid white;
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover { transform: translateY(-5px); }
+
+        /* Two Photo Gallery */
+        .gallery {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin: 40px 0;
+        }
+
+        .polaroid {
+            background: white;
+            padding: 12px 12px 35px 12px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            transition: all 0.3s ease;
+            width: 220px;
+            border-radius: 3px;
+            position: relative;
+        }
+
+        .polaroid:nth-child(1) { transform: rotate(-3deg); }
+        .polaroid:nth-child(2) { transform: rotate(3deg); margin-top: 10px; }
+
+        .polaroid:hover {
+            transform: scale(1.05) rotate(0deg);
+            z-index: 10;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+        }
+
+        .polaroid img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            border: 1px solid #f0f0f0;
+        }
+
+        /* Buttons */
+        .proposal-area { margin-top: 50px; padding: 20px; }
+        
+        .buttons {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 30px;
+            margin-top: 30px;
+            height: 80px; 
+            position: relative;
+        }
+
+        .btn {
+            padding: 15px 45px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: transform 0.2s;
+            font-family: 'Nunito', sans-serif;
+        }
+
+        .btn-yes {
+            background: var(--deep-pink);
+            color: white;
+            box-shadow: 0 5px 15px rgba(255, 107, 129, 0.4);
+            animation: pulse 2s infinite;
+        }
+        .btn-yes:hover { transform: scale(1.1); background: #ff4762; }
+
+        .btn-no {
+            background: #fff;
+            color: var(--text-color);
+            border: 2px solid #ddd;
+            position: absolute; 
+            left: 60%;
+        }
+
+        /* Overlay */
+        .overlay {
+            position: fixed;
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%;
+            background: rgba(255, 240, 245, 0.98);
+            z-index: 1000;
+            overflow-y: auto;
+            display: block;
+            padding: 50px 20px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+        }
+
+        .overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .overlay-content {
+            max-width: 600px;
+            margin: 0 auto; 
+            text-align: center;
+            padding-bottom: 50px;
+            animation: popIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .video-frame {
+            background: white;
+            padding: 10px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(255, 107, 129, 0.3);
+            margin-top: 20px;
+        }
+        
+        iframe { display: block; }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        @keyframes popIn {
+            0% { transform: scale(0); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        @media (max-width: 600px) {
+            h1 { font-size: 2.8rem; }
+            .gallery { gap: 15px; }
+            .polaroid { width: 45%; height: auto; padding: 8px 8px 25px 8px; }
+            .polaroid img { height: 150px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="hearts-container"></div>
+
+    <audio id="bgMusic" loop style="display: none;">
+        <source src="audio.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="container">
+        
+        <header class="card">
+            <div style="font-size: 3rem;">🎀</div>
+            <h1>Hi, Parthavi</h1>
+            <p style="font-size: 1.2rem;">This is for you my cutie, cheenu, meri jaan, baby, my love.</p>
+            <p style="font-size: 1.2rem;">I hope you like it and it makes you smile. I love you so much and I can't wait to see you again.</p>
+        </header>
+
+        <section class="gallery">
+            <div class="polaroid">
+                <img src="https://drive.google.com/thumbnail?id=1-8boGoPCKJ4kCxxrao8BJhtIwJPPdqfK&sz=w1000" alt="Memory 1">
+            </div>
+            
+            <div class="polaroid">
+                 <img src="https://drive.google.com/thumbnail?id=1-7NZ0Rl4LtG_MoKypItGfuw_d5HXve0k&sz=w1000" alt="Memory 2">
+            </div>
+        </section>
+
+        <section class="card">
+            <h2>My Wifey,</h2>
+            <p>
+                I am so grateful to have you in my life. You're really the best thing that has ever happened to me. I genuinely think about you the whole day, I can never see you upset. It makes me sick to my stomach.
+            </p>
+            <p>
+                I miss you soooooo much and I can't wait to see you again. Come back soon to me and we'll spend sooo much time together. I love you more than words can express.
+            </p>
+            <p style="margin-top: 30px; font-weight: bold; font-family: 'Great Vibes', cursive; font-size: 2rem;">
+                - Your Arnav
+            </p>
+        </section>
+
+        <section class="proposal-area">
+            <h1>Will you be my Valentine? 💘</h1>
+            
+            <div class="buttons">
+                <button class="btn btn-yes" onclick="handleYes()">Yes 💖</button>
+                <button class="btn btn-no" id="noBtn" onmouseover="moveButton()" ontouchstart="moveButton()">No 😔</button>
+            </div>
+        </section>
+
+    </div>
+
+    <div class="overlay" id="overlay">
+        <div class="overlay-content">
+            <h1 style="font-size: 3rem; margin-bottom: 10px;">YAY! I LOVE YOUU BABEE 💖</h1>
+            <p>I know we won't get to meet on valentine's day, but I really can't wait for our date in March when you come back.</p>
+            
+            <div class="video-frame">
+                <iframe 
+                    src="https://drive.google.com/file/d/1-AtpZEiRDozvJj0XsUntnRcY6w2v-D3y/preview" 
+                    width="100%" 
+                    height="400" 
+                    style="border:none; border-radius: 10px;" 
+                    allow="autoplay">
+                </iframe>
+            </div>
+            
+            <button class="btn btn-yes" style="margin-top: 20px;" onclick="closeOverlay()">Replay 🔄</button>
+        </div>
+    </div>
+
+    <script>
+        // 1. Background Hearts
+        function createHearts() {
+            const container = document.getElementById('hearts-container');
+            const heart = document.createElement('div');
+            heart.classList.add('bg-heart');
+            heart.innerHTML = '❤';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = Math.random() * 3 + 2 + 's';
+            heart.style.fontSize = Math.random() * 20 + 10 + 'px';
+            container.appendChild(heart);
+            setTimeout(() => heart.remove(), 5000);
+        }
+        setInterval(createHearts, 300);
+
+        // 2. Runaway Button
+        const noBtn = document.getElementById('noBtn');
+        function moveButton() {
+            const width = window.innerWidth;
+            const height = window.innerHeight;
+            const btnWidth = noBtn.offsetWidth;
+            const btnHeight = noBtn.offsetHeight;
+            const newX = Math.random() * (width - btnWidth - 40) + 20;
+            const newY = Math.random() * (height - btnHeight - 40) + 20;
+
+            noBtn.style.position = 'fixed';
+            noBtn.style.left = newX + 'px';
+            noBtn.style.top = newY + 'px';
+        }
+
+        // 3. Success & Music Trigger
+        function handleYes() {
+            const overlay = document.getElementById('overlay');
+            const audio = document.getElementById('bgMusic');
+
+            // Reset and Play Music
+            audio.currentTime = 0; 
+            audio.play().catch(e => console.log("Audio play failed:", e));
+
+            // Show Overlay
+            overlay.classList.add('active');
+            
+            // Create confetti
+            for (let i = 0; i < 50; i++) {
+                setTimeout(createExplosionHeart, i * 20);
+            }
+        }
+
+        // 4. Close Overlay & Stop Music
+        function closeOverlay() {
+            const overlay = document.getElementById('overlay');
+            const audio = document.getElementById('bgMusic');
+            
+            // Hide Overlay
+            overlay.classList.remove('active');
+
+            // Stop and Reset Music
+            audio.pause();
+            audio.currentTime = 0;
+        }
+
+        function createExplosionHeart() {
+            const heart = document.createElement('div');
+            heart.innerHTML = '💖';
+            heart.style.position = 'fixed';
+            heart.style.left = '50%';
+            heart.style.top = '50%';
+            heart.style.fontSize = Math.random() * 30 + 20 + 'px';
+            heart.style.transform = 'translate(-50%, -50%)';
+            heart.style.transition = 'all 1s ease-out';
+            heart.style.zIndex = '2000';
+            document.body.appendChild(heart);
+            
+            const destX = (Math.random() - 0.5) * window.innerWidth;
+            const destY = (Math.random() - 0.5) * window.innerHeight;
+            
+            requestAnimationFrame(() => {
+                heart.style.transform = `translate(${destX}px, ${destY}px) rotate(${Math.random()*360}deg)`;
+                heart.style.opacity = '0';
+            });
+            setTimeout(() => heart.remove(), 1000);
+        }
+    </script>
+</body>
+</html>
